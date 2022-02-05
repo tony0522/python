@@ -30,14 +30,30 @@ for row in rows:
 	# cols2 finder
 	cols2=row.find_all('a')
 	# list combine
-	tmpcols1 = [x.text.replace(' ','') for x in cols1]
+	tmpcols1 = [x.text.replace(' ','-') for x in cols1]
+	# handling the cols2 and its sub data
 	tmpcols2 = [base_url + x1['href'].replace('./','/') for x1 in cols2]
+
+	uni_detail_urls = tmpcols2
+	for uni_detail_url in uni_detail_urls:
+		# make the request connection
+		response_sub = requests.get(uni_detail_url, headers=headers)
+		soup_sub = BeautifulSoup(response_sub.content, "html.parser")
+
+		rows_sub = soup_sub.find_all(
+			style=[
+				"border-bottom-style:none", 
+				"border-top-style:none ;border-bottom-style:none",
+				"border-top-style:none "]
+			)
+		tmpcols2_sub = [x.text.replace(' ','') for x in rows_sub]
+		# print(tmpcols2_sub)
+
 	# export final data if cols1 not empty
 	if (tmpcols1):
-		cols3 = tmpcols1 + tmpcols2
+		cols3 = tmpcols1 + tmpcols2 + tmpcols2_sub
 		data.append(cols3)
 
-# print(data)
 # write data list into csv
 with open('output.csv', 'w', newline='') as csvfile:
 	writer = csv.writer(csvfile)
