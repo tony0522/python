@@ -32,7 +32,6 @@ for row in rows:
 	cols2=row.find_all('a')
 	# list combine and space handling
 	tmpcols1 = [re.sub(' +', ' ', x.text) for x in cols1]
-	print(tmpcols1)
 	# handling the cols2 and its sub data
 	tmpcols2 = [base_url + x1['href'].replace('./','/') for x1 in cols2]
 
@@ -49,7 +48,6 @@ for row in rows:
 				"border-top-style:none "]
 			)
 		tmpcols2_sub = [x.text.replace(' ','') for x in rows_sub]
-		# print(tmpcols2_sub)
 
 	# export final data if cols1 not empty
 	if (tmpcols1):
