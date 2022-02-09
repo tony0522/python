@@ -1,10 +1,11 @@
 import csv
+import re
 import requests
 from bs4 import BeautifulSoup
 
 # global variables
 base_url = "https://www.cac.edu.tw/star111/system/0ColQry_for111star_5f9g8t4q"
-uni_url = base_url + "/SGroup3.htm"
+uni_url = base_url + "/SGroup2.htm"
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36'}
 
 # init environment setting 
@@ -22,15 +23,16 @@ rows = my_table.findChildren(['tr'])
 
 # init data list
 data = []
-data.append(['校系名稱及代碼','詳細資料'])
+data.append(['學校名稱','校系名稱','校系代碼','詳細資料'])
 
 for row in rows:
 	# cols1 finder
 	cols1=row.find_all(title="校系名稱及代碼")
 	# cols2 finder
 	cols2=row.find_all('a')
-	# list combine
-	tmpcols1 = [x.text.replace(' ','-') for x in cols1]
+	# list combine and space handling
+	tmpcols1 = [re.sub(' +', ' ', x.text) for x in cols1]
+	print(tmpcols1)
 	# handling the cols2 and its sub data
 	tmpcols2 = [base_url + x1['href'].replace('./','/') for x1 in cols2]
 
