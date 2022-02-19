@@ -96,3 +96,8 @@ def writecsv(output_filename, data):
 		writer = csv.writer(csvfile)
 		writer.writerows(data)
 
+def getcsv(input_filename):
+    # read data list into csv
+    with open(input_filename, newline='') as csvfile:
+        rows = csv.reader(csvfile)
+    return rows
