@@ -1,5 +1,6 @@
 import re, csv, requests
 from bs4 import BeautifulSoup
+import mysql.connector
 
 def scrape(group):
     # global variables
@@ -76,7 +77,7 @@ def scrape(group):
                 data.append(cols3)
 
         # final the list, remove uselses
-        removeIndex = [3,5,7,9,11,13] # The indices you want to remove
+        removeIndex = [3,5,7,9,11,13,15] # The indices you want to remove
         for l in data:
             for index,value in enumerate(removeIndex):
                 # Because after pop, the list index will minor 1
@@ -100,4 +101,31 @@ def getcsv(input_filename):
     # read data list into csv
     with open(input_filename, newline='') as csvfile:
         rows = csv.reader(csvfile)
+        rows = list(rows)
     return rows
+
+def importdb(rows):
+    mydb = mysql.connector.connect(
+        host="127.0.0.1",
+        user="sa",
+        password="Kazumi2008",
+        database="python"
+    )
+
+    add_score = ("INSERT INTO score "
+        "(學校名稱,校系名稱,校系代碼,國文,英文,數學A,數學B,社會,自然,英聽,詳細資料) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+
+    counter = 0
+    mycursor = mydb.cursor()
+
+    for row in rows:
+        counter += 1
+        if (counter == 1): continue
+        mycursor.execute(add_score, row)
+        # if (counter > 3): break
+
+    mydb.commit()
+    mycursor.close()
+
+    mydb.close()

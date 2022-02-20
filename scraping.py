@@ -73,7 +73,7 @@ if (response.status_code == 200):
 
 
 	# final the list, remove uselses
-	removeIndex = [3,5,7,9,11,13] # The indices you want to remove
+	removeIndex = [3,5,7,9,11,13,15] # The indices you want to remove
 	for l in data:
 		for index,value in enumerate(removeIndex):
 			# Because after pop, the list index will minor 1
