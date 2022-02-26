@@ -105,13 +105,13 @@ def getcsv(input_filename):
 		rows = list(rows)
 	return rows
 
-def importdb(rows):
+def importdb(rows, group="1"):
 	conn = sqlite3.connect('sqlite3.db')
 	cur = conn.cursor()
 
 	add_score = ("INSERT INTO score "
-		"(school_name,dept_name,dept_code,chinese,english,math_A,math_B,social_studies,science,listening,detail) "
-		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+		"(main_group,school_name,dept_name,dept_code,chinese,english,math_A,math_B,social_studies,science,listening,detail) "
+		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 
 	counter = 0
 	cur = conn.cursor()
@@ -119,6 +119,7 @@ def importdb(rows):
 	for row in rows:
 		counter += 1
 		if (counter == 1): continue
+		row.insert(0, group)
 		cur.execute(add_score, row)
 		# if (counter > 3): break
 
